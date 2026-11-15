@@ -275,8 +275,11 @@ covers; this change does not alter the CLI's Terms acceptance behavior.
 `$(PREFIX)/share/doc/hypermesh-cli` (override `DOCDIR` if needed). CI compares the
 installed files byte-for-byte against the source files for both CLI aliases.
 
-This is the owner-license preparation slice. Dependency notices, reachable-history
-review and GHCR container preparation remain separate work. Container distribution
-will use GHCR, with moving TEST channels and no Actions distribution archives.
+Container preparation preserves notices for all seven declared Go modules and the
+Go toolchain; CI compares upstream files with the checksum-verified module cache.
+See [licenses/README.md](licenses/README.md) for review scope and container usage.
+Trusted main publishes the qualified CLI to `ghcr.io/hyperme-sh/hypermesh-cli/runtime:test`.
+PRs have no registry write credentials. TEST stays on moving channels and there
+are no Actions distribution archives.
 Integration/e2e remains in scheduled nightly CI. Existing source installation
 commands remain available; this preparation creates no version tag or release.
