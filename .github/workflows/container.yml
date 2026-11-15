@@ -1,0 +1,70 @@
+name: Container preparation
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: cli-container-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  preparation:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff
+        with:
+          go-version-file: go.mod
+      - name: Prepare disposable context
+        shell: bash
+        run: |
+          echo "RUNTIME_CONTEXT=$(mktemp -d "$RUNNER_TEMP/cli-context.XXXXXX")" >> "$GITHUB_ENV"
+          echo "DOCKER_CONFIG=$(mktemp -d "$RUNNER_TEMP/cli-login.XXXXXX")" >> "$GITHUB_ENV"
+      - name: Tooling contracts
+        run: python3 -m unittest discover -s tests_tools -v
+      - name: Qualify exact container bytes
+        run: bash scripts/prepare-container.sh
+      - name: Clean job-local files
+        if: always()
+        run: |
+          docker image rm "hypermesh-cli:ci-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" "ghcr.io/${GITHUB_REPOSITORY,,}/runtime:test" >/dev/null 2>&1 || true
+          test -z "${RUNTIME_CONTEXT:-}" || rm -rf -- "$RUNTIME_CONTEXT"
+          test -z "${DOCKER_CONFIG:-}" || rm -rf -- "$DOCKER_CONFIG"
+  publication:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      packages: write
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff
+        with:
+          go-version-file: go.mod
+      - name: Prepare disposable context
+        shell: bash
+        run: |
+          echo "RUNTIME_CONTEXT=$(mktemp -d "$RUNNER_TEMP/cli-context.XXXXXX")" >> "$GITHUB_ENV"
+          echo "DOCKER_CONFIG=$(mktemp -d "$RUNNER_TEMP/cli-login.XXXXXX")" >> "$GITHUB_ENV"
+      - name: Tooling contracts
+        run: python3 -m unittest discover -s tests_tools -v
+      - name: Qualify exact container bytes
+        run: bash scripts/prepare-container.sh
+      - name: Publish and pull back qualified TEST image
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/publish-test-container.sh
+      - name: Clean job-local files
+        if: always()
+        run: |
+          docker image rm "hypermesh-cli:ci-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" "ghcr.io/${GITHUB_REPOSITORY,,}/runtime:test" >/dev/null 2>&1 || true
+          test -z "${RUNTIME_CONTEXT:-}" || rm -rf -- "$RUNTIME_CONTEXT"
+          test -z "${DOCKER_CONFIG:-}" || rm -rf -- "$DOCKER_CONFIG"

@@ -5,3 +5,8 @@ Licensed under the Apache License, Version 2.0. See LICENSE.
 Third-party dependencies retain their own licenses and notices.
 This notice does not relicense third-party code or change the terms for using
 hosted Hypermesh services.
+
+Container layer inspection and qualified-image publication tooling are adapted
+from hyperme-sh/marketplace-service and hyperme-sh/ai-service (Apache-2.0).
+Dependency texts and their module versions are included under
+/usr/share/doc/hypermesh-cli in the container.
