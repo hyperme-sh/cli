@@ -263,3 +263,20 @@ an explicit OpenAI-compatible provider. Continue models must share one explicit
 provider root. Ambiguous configurations fail before edits. Aider and Zed remain
 unsupported automatic edits; their existing backups can still be restored.
 Hypermesh for VS Code retains its separate Hypermesh credential path.
+
+## Software license and distribution preparation
+
+Hypermesh CLI source is licensed under Apache-2.0; see [LICENSE](LICENSE) and
+[NOTICE](NOTICE). Third-party dependencies retain their own terms. The embedded
+Hypermesh Terms already defer to an open-source license for the component it
+covers; this change does not alter the CLI's Terms acceptance behavior.
+
+`make install` installs the owner license and notice under
+`$(PREFIX)/share/doc/hypermesh-cli` (override `DOCDIR` if needed). CI compares the
+installed files byte-for-byte against the source files for both CLI aliases.
+
+This is the owner-license preparation slice. Dependency notices, reachable-history
+review and GHCR container preparation remain separate work. Container distribution
+will use GHCR, with moving TEST channels and no Actions distribution archives.
+Integration/e2e remains in scheduled nightly CI. Existing source installation
+commands remain available; this preparation creates no version tag or release.
