@@ -1,0 +1,11 @@
+{
+  "images": [
+    {
+      "repository": "hyperme-sh/hypermesh-cli/runtime",
+      "digest": "sha256:88c6422d0ded48702a156ba736a65bf9f39414d5a13eb0f5df4dc2f7eadaed4e",
+      "published_commit": "f68d8deaeb9e104df75667a9c3a87ba0f029314f",
+      "run_url": "https://github.com/hyperme-sh/hypermesh-cli/actions/runs/43685092978"
+    }
+  ],
+  "scope": "Current tagged amd64 manifests plus recorded publication logs; no complete untagged/deleted inventory"
+}
