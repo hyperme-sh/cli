@@ -94,3 +94,19 @@ docker() {
                 result=subprocess.run(['bash','-c',fake+(ROOT/'scripts/publish-test-container.sh').read_text()],env=env,capture_output=True)
                 self.assertEqual(result.returncode==0,success)
                 self.assertEqual((root/'calls').exists(),success)
+
+    def test_image_cannot_inherit_routing_environment(self):
+        inspect=load('inspect-container')
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            with tarfile.open(root/'image.tar','w') as archive:
+                for name,data in {'manifest.json':b'[{"Config":"config.json","Layers":[]}]','config.json':json.dumps({'config':{'User':'65532:65532','Env':['HYPERMESH_API_BASE=https://untrusted.invalid']}}).encode()}.items():
+                    entry=tarfile.TarInfo(name);entry.size=len(data);archive.addfile(entry,io.BytesIO(data))
+            with self.assertRaisesRegex(ValueError,'routing'):inspect.unpack_image(root/'image.tar',root/'out')
+
+    def test_privileged_actions_and_base_are_immutable_build_inputs(self):
+        import re
+        source=(ROOT/'.github/workflows/container.yml').read_text()
+        for reference in re.findall(r'uses: (\S+)',source):
+            self.assertRegex(reference,r'@[a-f0-9]{40}$')
+        self.assertRegex((ROOT/'Dockerfile').read_text().splitlines()[0],r'@sha256:[a-f0-9]{64}$')

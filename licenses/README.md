@@ -30,3 +30,9 @@ Hidden/deleted refs, unreachable objects, remote LFS content, unknown archive
 formats and other registries are outside that scope. Scan output never grants
 public clearance by itself; no history is rewritten. Older-image review begins
 with later retained GHCR publications. Integration/e2e stays in nightly CI.
+
+The base image is bound to the exact digest inspected in initial PR CI. Build
+input digests and action commits do not pin the moving TEST channel. Image
+configuration rejects inherited HYPERMESH_/CONDUCTOR_ variables. Registry login
+and the package-write token are supplied only to the final publication step;
+qualification scripts receive no registry credential.

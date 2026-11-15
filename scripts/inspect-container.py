@@ -12,6 +12,10 @@ def unpack_image(archive, destination, *, enforce_user=True):
         if len(manifest)!=1:raise ValueError('Expected one saved image')
         config=json.load(outer.extractfile(manifest[0]['Config']))
         if enforce_user and config.get('config',{}).get('User')!='65532:65532':raise ValueError('Runtime must be unprivileged')
+        for variable in config.get('config', {}).get('Env', []):
+            key = variable.partition('=')[0]
+            if key.startswith(('HYPERMESH_', 'CONDUCTOR_')):
+                raise ValueError('Image must not inherit routing or credential configuration')
         for i,name in enumerate(manifest[0]['Layers']):
             target=destination/str(i);target.mkdir(parents=True)
             with tarfile.open(fileobj=outer.extractfile(name)) as layer:
