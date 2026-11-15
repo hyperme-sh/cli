@@ -10,8 +10,8 @@ These are attribution records, not a change to third-party license terms.
 
 The Linux amd64 container uses statically linked CLI binaries and the non-root
 Distroless static Debian 12 base, which supplies TLS trust roots and basic runtime
-files. Base-image legal material stays in its original locations. This slice does
-not claim a reproducible source rebuild or complete base-image licensing review.
+files. Base-image legal material stays in its original locations. The exact-version base source/legal mapping is documented in [BASE.md](BASE.md);
+no reproducible whole-image rebuild is claimed.
 CI runs unit/contracts with CGO disabled, builds both aliases, scans every retained
 image layer, verifies exact copied binary/legal bytes, and runs offline help only.
 No service, lease, provider, or integration/e2e flow is started.
@@ -28,8 +28,8 @@ HEAD and fetched origin branches/tags, including deleted historical files, witho
 executing them. Known ZIP/tar archive extensions retain recursive scanning.
 Hidden/deleted refs, unreachable objects, remote LFS content, unknown archive
 formats and other registries are outside that scope. Scan output never grants
-public clearance by itself; no history is rewritten. Older-image review begins
-with later retained GHCR publications. Integration/e2e stays in nightly CI.
+public clearance by itself; no history is rewritten. Older-image scope and limitations are recorded in
+[the historical distribution review](../docs/historical-distributions/README.md). Integration/e2e stays in nightly CI.
 
 The base image is bound to the exact digest inspected in initial PR CI. Build
 input digests and action commits do not pin the moving TEST channel. Image

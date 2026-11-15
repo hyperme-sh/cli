@@ -7,6 +7,7 @@ cleanup() { test -z "$container" || docker rm "$container" >/dev/null; rm -rf --
 trap cleanup EXIT
 docker save "$image" -o "$scratch/image.tar"
 python3 scripts/inspect-container.py "$scratch/image.tar" "$scratch/layers"
+python3 scripts/prepare-base.py verify "$RUNTIME_CONTEXT/legal/base-sources" --layers "$scratch/layers"
 bash scripts/scan-secrets.sh "$scratch/layers"
 container=$(docker create "$image")
 docker cp "$container:/usr/share/doc/hypermesh-cli" "$scratch/legal"

@@ -10,3 +10,9 @@ Container layer inspection and qualified-image publication tooling are adapted
 from hyperme-sh/marketplace-service and hyperme-sh/ai-service (Apache-2.0).
 Dependency texts and their module versions are included under
 /usr/share/doc/hypermesh-cli in the container.
+
+The container retains Debian package copyright and common-license files in their
+original locations. Exact-version Debian sources and a Distroless build-recipe
+reference are included under /usr/share/doc/hypermesh-cli/base-sources.
+Historical registry inventory tooling is adapted from hyperme-sh/marketplace-service
+and hyperme-sh/ai-service (Apache-2.0).

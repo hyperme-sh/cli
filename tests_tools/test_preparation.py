@@ -110,3 +110,56 @@ docker() {
         for reference in re.findall(r'uses: (\S+)',source):
             self.assertRegex(reference,r'@[a-f0-9]{40}$')
         self.assertRegex((ROOT/'Dockerfile').read_text().splitlines()[0],r'@sha256:[a-f0-9]{64}$')
+
+    def test_base_source_tampering_is_rejected(self):
+        import hashlib
+        module=load('prepare-base')
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);(root/'recipe.tar.gz').write_bytes(b'changed')
+            manifest={'schema_version':1,'publication_cleared':False,'packages':[],
+                'recipe_reference':{'filename':'recipe.tar.gz','url':'https://codeload.github.com/example/project/tar.gz/commit','size':8,'sha256':hashlib.sha256(b'original').hexdigest()}}
+            with self.assertRaisesRegex(ValueError,'source changed'):module.verify_sources(manifest,root)
+
+    def test_base_layers_cannot_drift(self):
+        module=load('prepare-base')
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);(root/'image-config.json').write_text('{"rootfs":{"diff_ids":["changed"]}}')
+            with self.assertRaisesRegex(ValueError,'layers changed'):module.verify_layers({'diff_ids':['expected']},root)
+
+    def test_base_source_redirects_refused(self):
+        with self.assertRaises(ValueError):load('prepare-base').NoRedirects().redirect_request(None,None,302,'Found',{},'https://untrusted.invalid')
+
+    def test_registry_pagination_cannot_escape(self):
+        module=load('inventory_registry')
+        for url in ['https://untrusted.invalid/v2/hyperme-sh/hypermesh-cli/runtime/tags/list',
+                    'https://ghcr.io/v2/other/repo/tags/list',
+                    'https://ghcr.io/v2/hyperme-sh/hypermesh-cli/runtime/%2e%2e/private']:
+            with self.subTest(url=url), self.assertRaises(ValueError):module.registry_url(url)
+
+    def test_old_digest_selection_is_retained(self):
+        module=load('merge_registry_inventory')
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            repo='hyperme-sh/hypermesh-cli/runtime'
+            (root/'runtime').write_text('matrix='+json.dumps({'include':[{'repository':repo,'digest':'sha256:'+'a'*64}]}))
+            older={'repository':repo,'digest':'sha256:'+'b'*64,'run_url':'https://github.com/hyperme-sh/hypermesh-cli/actions/runs/1'}
+            self.assertEqual(len(module.merge(root,{'images':[older,older]})),2)
+            older['repository']='other/repo'
+            with self.assertRaises(ValueError):module.merge(root,{'images':[older]})
+
+    def test_source_classification_is_bound_to_exact_archive_and_member(self):
+        import hashlib
+        module=load('classify_base_findings')
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);folder=root/'0/usr/share/doc/hypermesh-cli/base-sources';folder.mkdir(parents=True)
+            path=folder/'source.tar.gz';data=b'public package identifier\n'
+            with tarfile.open(path,'w:gz') as archive:
+                entry=tarfile.TarInfo('lock.json');entry.size=len(data);archive.addfile(entry,io.BytesIO(data))
+            manifest={'archives':[{'filename':path.name,'sha256':hashlib.sha256(path.read_bytes()).hexdigest()}]}
+            baseline={'members':[{'archive':path.name,'member':'lock.json','sha256':hashlib.sha256(data).hexdigest(),'rules':{'generic-api-key':[1]}}]}
+            finding={'File':str(path)+'!lock.json','StartLine':1,'RuleID':'generic-api-key'}
+            self.assertEqual(module.classify([finding],root,manifest,baseline),(1,[]))
+            finding['StartLine']=2
+            self.assertEqual(module.classify([finding],root,manifest,baseline),(0,[finding]))
+            finding['StartLine']=1;path.write_bytes(b'changed archive')
+            self.assertEqual(module.classify([finding],root,manifest,baseline),(0,[finding]))

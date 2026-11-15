@@ -1,0 +1,82 @@
+name: Historical image review
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/historical-images.yml'
+      - 'scripts/inventory_registry.py'
+      - 'scripts/merge_registry_inventory.py'
+      - 'scripts/review_image.py'
+      - 'scripts/inspect-container.py'
+      - 'scripts/scan-secrets.sh'
+      - 'scripts/classify_base_findings.py'
+      - '.github/workflows/base-source-scan-baseline.json'
+      - 'licenses/base-image.json'
+      - 'scripts/check-older-image.sh'
+      - '.github/workflows/recorded-images.json'
+      - 'docs/historical-distributions/**'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/historical-images.yml'
+      - 'scripts/inventory_registry.py'
+      - 'scripts/merge_registry_inventory.py'
+      - 'scripts/review_image.py'
+      - 'scripts/inspect-container.py'
+      - 'scripts/scan-secrets.sh'
+      - 'scripts/classify_base_findings.py'
+      - '.github/workflows/base-source-scan-baseline.json'
+      - 'licenses/base-image.json'
+      - 'scripts/check-older-image.sh'
+      - '.github/workflows/recorded-images.json'
+      - 'docs/historical-distributions/**'
+concurrency:
+  group: cli-historical-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+  packages: read
+jobs:
+  inventory:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      matrix: ${{ steps.inventory.outputs.matrix }}
+      review-needed: ${{ steps.inventory.outputs.review-needed }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - id: inventory
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          REGISTRY_USER: ${{ github.actor }}
+          REGISTRY_TOKEN: ${{ github.token }}
+        run: |
+          scratch=$(mktemp -d)
+          trap 'rm -rf "$scratch"' EXIT
+          for kind in runtime; do
+            HISTORICAL_REPOSITORY="hyperme-sh/hypermesh-cli/$kind" python3 scripts/inventory_registry.py "$scratch/$kind"
+          done
+          python3 scripts/merge_registry_inventory.py "$scratch" "$GITHUB_OUTPUT"
+  image:
+    needs: inventory
+    if: needs.inventory.outputs.review-needed == 'true'
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix: ${{ fromJSON(needs.inventory.outputs.matrix) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    name: Review ${{ matrix.repository }} ${{ matrix.digest }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Inspect every image layer without executing it
+        env:
+          DIGEST: ${{ matrix.digest }}
+          HISTORICAL_REPOSITORY: ${{ matrix.repository }}
+          REGISTRY_USER: ${{ github.actor }}
+          REGISTRY_TOKEN: ${{ github.token }}
+        run: bash scripts/check-older-image.sh "$DIGEST"

@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "base": "gcr.io/distroless/static-debian12@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab",
+  "platform": "linux/amd64",
+  "diff_ids": [
+    "sha256:7223ea1323e8c1159ec17f07d35acc27bdd1cc2bc3ed425b44ef21dac9915db0",
+    "sha256:8fa10c0194df9b7c054c90dbe482585f768a54428fc90a5b78a0066a123b1bba",
+    "sha256:35b5ba6e08cdd034b8d1920f9c7203e5d66f258e1915f164a01de0af14f34710",
+    "sha256:114dde0fefebbca13165d0da9c500a66190e497a82a53dcaabc3172d630be1e9",
+    "sha256:4d049f83d9cf21d1f5cc0e11deaf36df02790d0e60c1a3829538fb4b61685368",
+    "sha256:af5aa97ebe6ce1604747ec1e21af7136ded391bcabe4acef882e718a87c86bcc",
+    "sha256:6f1cdceb6a3146f0ccb986521156bef8a422cdbb0863396f7f751f575ba308f4",
+    "sha256:bd3cdfae1d3fdd83a2231d608969b38b82349777c2fff9a7c12d54f8ac5c9b38",
+    "sha256:4cde6b0bb6f50a5f255eef7b2a42162c661cf776b803225dcac9a659e396bb6b",
+    "sha256:ad51d0769d16ba578106a177987dfe3d2e02c1668c852b795b2f6b024068242a",
+    "sha256:6e7fbcf090d09b73a4aa85f9dce690d0ace73877c150b7c56955487b6e7a822a",
+    "sha256:5904c32f457c96a16c8c68f5ccdf518c8138cd9e5971de9ce6d564fc481af222"
+  ],
+  "packages": [
+    {
+      "package": "base-files",
+      "version": "12.4+deb12u15",
+      "archives": [
+        {
+          "filename": "base-files_12.4+deb12u15.dsc",
+          "url": "https://deb.debian.org/debian/pool/main/b/base-files/base-files_12.4+deb12u15.dsc",
+          "sha256": "e531274d0c3916dacfe55bbd27148d775b004e1836bc2fbb01549f142d524e8c",
+          "size": 1137
+        },
+        {
+          "filename": "base-files_12.4+deb12u15.tar.xz",
+          "url": "https://deb.debian.org/debian/pool/main/b/base-files/base-files_12.4+deb12u15.tar.xz",
+          "sha256": "9fb369194365fe9da74621da247ea70884fc3d1d9c063db310764ef0e43c02c5",
+          "size": 66280
+        }
+      ],
+      "copyright_source": {
+        "archive": "base-files_12.4+deb12u15.tar.xz",
+        "member": "base-files-12.4+deb12u15/debian/copyright"
+      },
+      "copyright_sha256": "fd7e4aae7e7b05f217bcf2d02322825c360e66c52c4c2f1b28d784d6297a1c23",
+      "status_sha256": "ebfb743383af695719a4120649fe23d50180a01dfa07a6ea4b3abfe023f4d37b"
+    },
+    {
+      "package": "netbase",
+      "version": "6.4",
+      "archives": [
+        {
+          "filename": "netbase_6.4.dsc",
+          "url": "https://deb.debian.org/debian/pool/main/n/netbase/netbase_6.4.dsc",
+          "sha256": "dc26cfcaa49fd874cc27c65216b2f8b6d3ad62845b78da4bdf0aea55592af756",
+          "size": 898
+        },
+        {
+          "filename": "netbase_6.4.tar.xz",
+          "url": "https://deb.debian.org/debian/pool/main/n/netbase/netbase_6.4.tar.xz",
+          "sha256": "fa6621826ff1150e581bd90bc3c8a4ecafe5df90404f207db6dcdf2c75f26ad7",
+          "size": 32712
+        }
+      ],
+      "copyright_source": {
+        "archive": "netbase_6.4.tar.xz",
+        "member": "netbase/debian/copyright"
+      },
+      "copyright_sha256": "795b66147ea5ad692991caa7008ece551fb0fa88b9c53656223bd1518dc58ab2",
+      "status_sha256": "98fedccdacaea717f25b010c087fa8606e1c5895ff16ba7be9f5d1ca8f7d9b5f"
+    },
+    {
+      "package": "tzdata",
+      "version": "2026b-0+deb12u1",
+      "archives": [
+        {
+          "filename": "tzdata_2026b-0+deb12u1.dsc",
+          "url": "https://deb.debian.org/debian/pool/main/t/tzdata/tzdata_2026b-0+deb12u1.dsc",
+          "sha256": "1a6e7b80823607130b79a12e5dff0d03ed81feb14faf5fffad94841e54cfe988",
+          "size": 2396
+        },
+        {
+          "filename": "tzdata_2026b.orig.tar.gz",
+          "url": "https://deb.debian.org/debian/pool/main/t/tzdata/tzdata_2026b.orig.tar.gz",
+          "sha256": "114543d9f19a6bfeb5bca43686aea173d38755a3db1f2eec112647ae92c6f544",
+          "size": 473703
+        },
+        {
+          "filename": "tzdata_2026b.orig.tar.gz.asc",
+          "url": "https://deb.debian.org/debian/pool/main/t/tzdata/tzdata_2026b.orig.tar.gz.asc",
+          "sha256": "b69ac9d9c926cb5ef80ab0b4bbc2a462eb9b4b36167e4aac649d87b744f7ca8b",
+          "size": 833
+        },
+        {
+          "filename": "tzdata_2026b-0+deb12u1.debian.tar.xz",
+          "url": "https://deb.debian.org/debian/pool/main/t/tzdata/tzdata_2026b-0+deb12u1.debian.tar.xz",
+          "sha256": "a5b70ea0b5ffe7905e0e8bb5ac45196131ce235d3a0cf5665b4b3ac96caa2c35",
+          "size": 122084
+        }
+      ],
+      "copyright_source": {
+        "archive": "tzdata_2026b-0+deb12u1.debian.tar.xz",
+        "member": "debian/copyright"
+      },
+      "copyright_sha256": "cb61132bc0fc7b26ef5a82ee18b2fb644a1362f4f286ed980ff22e408471f59a",
+      "status_sha256": "695b5b4b0ef811056e29458b4b8d4bb753030c1f378dffe51ec57d4d288325ac"
+    },
+    {
+      "package": "media-types",
+      "version": "10.0.0",
+      "archives": [
+        {
+          "filename": "media-types_10.0.0.dsc",
+          "url": "https://deb.debian.org/debian/pool/main/m/media-types/media-types_10.0.0.dsc",
+          "sha256": "d2e34e90508ac2c21c3cc6c01e2cf186093a8d2edcdc279e7d280a0a4ffe132d",
+          "size": 1624
+        },
+        {
+          "filename": "media-types_10.0.0.tar.xz",
+          "url": "https://deb.debian.org/debian/pool/main/m/media-types/media-types_10.0.0.tar.xz",
+          "sha256": "fe0f5adcb153e642c5e3295b811cddf6ba12bf3df5e7c6c012f3b98dfae1d245",
+          "size": 57912
+        }
+      ],
+      "copyright_source": {
+        "archive": "media-types_10.0.0.tar.xz",
+        "member": "media-types/debian/copyright"
+      },
+      "copyright_sha256": "5ded7c53199b6a1d089b0b7e231d77e5c84081c7156b372b3f11ad9c1c2c5cc7",
+      "status_sha256": "62f0651d9c8af8743038dd1b69a1927bbe3301fae7ea7fe4ae18638c2c328a8a"
+    },
+    {
+      "package": "ca-certificates",
+      "version": "20250419~deb12u1",
+      "archives": [
+        {
+          "filename": "ca-certificates_20250419~deb12u1.dsc",
+          "url": "https://snapshot.debian.org/file/6c83f0c83f6589e5137f5000e2108c9a0f7912b3/ca-certificates_20250419~deb12u1.dsc",
+          "sha256": "72339e810ef8237a4c346540b52baf49607172cc849c2680328a608ce0f6a34b",
+          "size": 1769
+        },
+        {
+          "filename": "ca-certificates_20250419~deb12u1.tar.xz",
+          "url": "https://snapshot.debian.org/file/ab7ed787f56c6ca86d0022213279936ddd2af735/ca-certificates_20250419~deb12u1.tar.xz",
+          "sha256": "b2a431cbab9a0ece921cffacbe238dc27a3e382ad4a1806dc8968c5eff30471d",
+          "size": 277244
+        }
+      ],
+      "copyright_source": {
+        "archive": "ca-certificates_20250419~deb12u1.tar.xz",
+        "member": "ca-certificates/debian/copyright"
+      },
+      "copyright_sha256": "e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c",
+      "status_sha256": "a5d4e40c2294067f6e018dd5394fb97348dcf83fc7ef59d3b6a1b49ae77df0cc"
+    }
+  ],
+  "recipe_reference": {
+    "filename": "distroless-b105d3858691c056fca3cc29ca6e33060ca3f2ef.tar.gz",
+    "url": "https://codeload.github.com/GoogleContainerTools/distroless/tar.gz/b105d3858691c056fca3cc29ca6e33060ca3f2ef",
+    "size": 151356,
+    "sha256": "ef5082c46797ae72aa1c56263dabf993ad9698182d665260d94f8c6c7af7a448",
+    "commit": "b105d3858691c056fca3cc29ca6e33060ca3f2ef",
+    "package_lock_member": "distroless-b105d3858691c056fca3cc29ca6e33060ca3f2ef/private/repos/deb/bookworm.lock.json"
+  },
+  "publication_cleared": false
+}
