@@ -1,6 +1,6 @@
 # hypermesh-cli
 
-Thin **Hypermesh** CLI for [Hyperme.sh](https://hyperme.sh): browse the catalog, create a lease, send chat through [Conductor](https://github.com/hyperme-sh/hypermesh-conductor), and manage local MCP config for the [desktop visor](https://github.com/hyperme-sh/hypermesh-visor).
+Thin **Hypermesh** CLI for [Hyperme.sh](https://hyperme.sh): browse the catalog, create a lease, send chat through [Conductor](https://github.com/hyperme-sh/conductor), and manage local MCP config for the [desktop visor](https://github.com/hyperme-sh/hypermesh-visor).
 
 Binaries: `hypermesh` and `hm`.
 
