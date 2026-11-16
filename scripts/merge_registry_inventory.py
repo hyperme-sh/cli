@@ -14,7 +14,7 @@ def merge(directory, records):
         for row in json.loads(value.removeprefix('matrix='))['include']:
             rows[(row['repository'],row['digest'])] = row
     for row in records['images']:
-        if not re.fullmatch(r'https://github.com/hyperme-sh/hypermesh-cli/actions/runs/[0-9]+',row['run_url']):
+        if not re.fullmatch(r'https://github\.com/hyperme-sh/(?:hypermesh-cli|cli)/actions/runs/[0-9]+',row['run_url']):
             raise ValueError('Invalid originating publication run')
         rows.setdefault((row['repository'],row['digest']),dict(repository=row['repository'],digest=row['digest'],tags=[]))
     for repo,digest in rows:

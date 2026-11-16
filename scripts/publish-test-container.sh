@@ -8,7 +8,7 @@ if [[ "$current" != "$GITHUB_SHA" ]]; then
 fi
 test "$(docker image inspect "$QUALIFIED_REF" --format '{{.Id}}')" = "$QUALIFIED_ID"
 test "$(docker image inspect "$QUALIFIED_REF" --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}')" = "$GITHUB_SHA"
-channel="ghcr.io/${GITHUB_REPOSITORY,,}/runtime:test"
+channel="${CLI_TEST_IMAGE:?workflow TEST image must be set}"
 : "${DOCKER_CONFIG:?isolated job login directory required}"
 trap 'docker logout ghcr.io >/dev/null 2>&1 || true' EXIT
 printf '%s' "$GH_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
