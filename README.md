@@ -283,3 +283,9 @@ PRs have no registry write credentials. TEST stays on moving channels and there
 are no Actions distribution archives.
 Integration/e2e remains in scheduled nightly CI. Existing source installation
 commands remain available; this preparation creates no version tag or release.
+
+## Runtime distribution
+
+Runtime builds do not download or bundle third-party source archives. Owner
+LICENSE/NOTICE and dependency legal texts remain in the image. Source-bundle
+records describe earlier builds only; no separate source container is introduced.

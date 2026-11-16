@@ -8,8 +8,6 @@ mkdir -p "$RUNTIME_CONTEXT/bin"
 go build -trimpath -o "$RUNTIME_CONTEXT/bin/hypermesh" ./cmd/hypermesh
 go build -trimpath -o "$RUNTIME_CONTEXT/bin/hm" ./cmd/hm
 python3 scripts/prepare-notices.py "$RUNTIME_CONTEXT/legal"
-python3 scripts/prepare-base.py fetch "$RUNTIME_CONTEXT/legal/base-sources"
-cp licenses/BASE.md "$RUNTIME_CONTEXT/legal/base-sources/README.md"
 cp Dockerfile "$RUNTIME_CONTEXT/Dockerfile"
 image="hypermesh-cli:ci-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
 docker build --build-arg SOURCE_SHA="$GITHUB_SHA" -t "$image" "$RUNTIME_CONTEXT"
