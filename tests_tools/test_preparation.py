@@ -146,6 +146,8 @@ docker() {
             (root/'runtime').write_text('matrix='+json.dumps({'include':[{'repository':repo,'digest':'sha256:'+'a'*64}]}))
             older={'repository':repo,'digest':'sha256:'+'b'*64,'run_url':'https://github.com/hyperme-sh/hypermesh-cli/actions/runs/1'}
             self.assertEqual(len(module.merge(root,{'images':[older,older]})),2)
+            older['run_url']='https://github.com/hyperme-sh/cli/actions/runs/2'
+            self.assertEqual(len(module.merge(root,{'images':[older]})),2)
             older['repository']='other/repo'
             with self.assertRaises(ValueError):module.merge(root,{'images':[older]})
 
