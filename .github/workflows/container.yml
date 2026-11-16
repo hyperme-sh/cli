@@ -32,7 +32,7 @@ jobs:
       - name: Clean job-local files
         if: always()
         run: |
-          docker image rm "hypermesh-cli:ci-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" "ghcr.io/${GITHUB_REPOSITORY,,}/runtime:test" >/dev/null 2>&1 || true
+          docker image rm "hypermesh-cli:ci-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" >/dev/null 2>&1 || true
           test -z "${RUNTIME_CONTEXT:-}" || rm -rf -- "$RUNTIME_CONTEXT"
           test -z "${DOCKER_CONFIG:-}" || rm -rf -- "$DOCKER_CONFIG"
   publication:
@@ -40,6 +40,8 @@ jobs:
     permissions:
       contents: read
       packages: write
+    env:
+      CLI_TEST_IMAGE: ghcr.io/hyperme-sh/hypermesh-cli/runtime:test
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -65,6 +67,6 @@ jobs:
       - name: Clean job-local files
         if: always()
         run: |
-          docker image rm "hypermesh-cli:ci-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" "ghcr.io/${GITHUB_REPOSITORY,,}/runtime:test" >/dev/null 2>&1 || true
+          docker image rm "hypermesh-cli:ci-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" "$CLI_TEST_IMAGE" >/dev/null 2>&1 || true
           test -z "${RUNTIME_CONTEXT:-}" || rm -rf -- "$RUNTIME_CONTEXT"
           test -z "${DOCKER_CONFIG:-}" || rm -rf -- "$DOCKER_CONFIG"

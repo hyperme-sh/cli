@@ -90,10 +90,12 @@ docker() {
         for event,identity,success in [('pull_request','sha256:a',False),('push','sha256:b',False),('push','sha256:a',True)]:
             with self.subTest(event=event,identity=identity), tempfile.TemporaryDirectory() as directory:
                 root=Path(directory)
-                env=dict(os.environ,GITHUB_SHA='a'*40,GITHUB_REPOSITORY='Example/CLI',QUALIFIED_REF='cli:fixture',QUALIFIED_ID='sha256:a',IMAGE_ID=identity,GITHUB_EVENT_NAME=event,GITHUB_REF='refs/heads/main',GH_TOKEN='fixture',GITHUB_ACTOR='fixture',DOCKER_CONFIG=str(root/'login'),GITHUB_STEP_SUMMARY=str(root/'summary'),CALLS=str(root/'calls'))
+                env=dict(os.environ,GITHUB_SHA='a'*40,GITHUB_REPOSITORY='Example/CLI',CLI_TEST_IMAGE='ghcr.io/hyperme-sh/hypermesh-cli/runtime:test',QUALIFIED_REF='cli:fixture',QUALIFIED_ID='sha256:a',IMAGE_ID=identity,GITHUB_EVENT_NAME=event,GITHUB_REF='refs/heads/main',GH_TOKEN='fixture',GITHUB_ACTOR='fixture',DOCKER_CONFIG=str(root/'login'),GITHUB_STEP_SUMMARY=str(root/'summary'),CALLS=str(root/'calls'))
                 result=subprocess.run(['bash','-c',fake+(ROOT/'scripts/publish-test-container.sh').read_text()],env=env,capture_output=True)
                 self.assertEqual(result.returncode==0,success)
                 self.assertEqual((root/'calls').exists(),success)
+                if success:
+                    self.assertEqual((root/'calls').read_text().strip(), env['CLI_TEST_IMAGE'])
 
     def test_image_cannot_inherit_routing_environment(self):
         inspect=load('inspect-container')
